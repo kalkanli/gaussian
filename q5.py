@@ -1,6 +1,3 @@
-import numpy
-
-
 def get_inverse(matrix):
     determinant = calculate_determinant(matrix)
     adjoint = get_adjoint(matrix)
