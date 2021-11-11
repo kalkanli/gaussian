@@ -67,28 +67,28 @@ def solve(filename):
             temp_row = Ab[row]
             Ab[row] = Ab[pivot]
             Ab[pivot] = temp_row
-            for j in range(row + 1, n):
+            for j in range(0, n):
+                if j == row:
+                    continue
                 ratio = float(Ab[j][column] / Ab[row][column])
-                for k in range(n):
+                for k in range(n+1):
                     Ab[j][k] = Ab[j][k] - Ab[row][k] * ratio
                     Ab[j][k] = round(Ab[j][k], 8)
             row = row + 1
             column = column + 1
+    print_m(Ab)
     result = []
     if row == column:
-        inverted_matrix = get_inverse(A)
         for i in range(n):
-            value = 0
-            for j in range(n):
-                value = value + b[j] * inverted_matrix[i][j]
-            result.append(round(value, 8))
+            result.append(round(Ab[i][n] / Ab[i][i], 8))
         print('Unique solution: ', end='')
         for x in result:
             print(x, end=' ')
         print()
         print("Inverted A: ")
-        print_m(inverted_matrix)
+        print_m(get_inverse(A))
     elif row > column:
+
         print('find arbitrary solution')
     else:
         print('Inconsistent problem')
