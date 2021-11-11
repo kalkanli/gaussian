@@ -1,5 +1,3 @@
-import numpy
-
 def get_inverse(matrix):
     determinant = calculate_determinant(matrix)
     adjoint = get_adjoint(matrix)
@@ -22,7 +20,6 @@ def get_adjoint(matrix):
             cof2 = cof2 * -1
         cof1 = cof1*-1
     return transpose
-        
 
 def divide_to_smaller_matrix(matrix, n, m):
     smaller_matrix = []
@@ -44,7 +41,6 @@ def print_m(matrix):
     for row in matrix:
         print(row)
 
-
 def solve(filename):
     Ab = []
     A = []
@@ -55,7 +51,7 @@ def solve(filename):
         line = f.readline()
         tokens = line.split(' ')
         Ab.append([float(token) for token in tokens])
-        b.append(tokens.pop())
+        b.append(float(tokens.pop()))
         A.append([float(token) for token in tokens])
     column = 0
     row = 0
@@ -75,24 +71,32 @@ def solve(filename):
                 ratio = float(Ab[j][column] / Ab[row][column])
                 for k in range(n):
                     Ab[j][k] = Ab[j][k] - Ab[row][k] * ratio
-                    Ab[j][k] = round(Ab[j][k], 5)
+                    Ab[j][k] = round(Ab[j][k], 8)
             row = row + 1
             column = column + 1
     result = []
-    for i in range(n):
-        result.append(0.)
     if row == column:
         inverted_matrix = get_inverse(A)
-        print(inverted_matrix)
-        print(numpy.linalg.inv(A))
+        for i in range(n):
+            value = 0
+            for j in range(n):
+                value = value + b[j] * inverted_matrix[i][j]
+            result.append(round(value, 8))
+        print('Unique solution: ', end='')
+        for x in result:
+            print(x, end=' ')
+        print()
+        print("Inverted A: ")
+        print_m(inverted_matrix)
     elif row > column:
         print('find arbitrary solution')
     else:
         print('Inconsistent problem')
+    print()
 
 
 
-# solve("Data1.txt")
-# solve("Data2.txt")
-# solve("Data3.txt")
+solve("Data1.txt")
+solve("Data2.txt")
+solve("Data3.txt")
 solve("Data4.txt")
