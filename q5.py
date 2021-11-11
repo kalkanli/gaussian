@@ -1,3 +1,6 @@
+import numpy
+
+
 def get_inverse(matrix):
     determinant = calculate_determinant(matrix)
     adjoint = get_adjoint(matrix)
@@ -44,14 +47,12 @@ def print_m(matrix):
 def solve(filename):
     Ab = []
     A = []
-    b = []
     f = open(filename, "r")
     n = int(f.readline())
     for i in range(n):
         line = f.readline()
         tokens = line.split(' ')
         Ab.append([float(token) for token in tokens])
-        b.append(float(tokens.pop()))
         A.append([float(token) for token in tokens])
     column = 0
     row = 0
@@ -76,9 +77,15 @@ def solve(filename):
                     Ab[j][k] = round(Ab[j][k], 8)
             row = row + 1
             column = column + 1
-    print_m(Ab)
     result = []
-    if row == column:
+    rank_of_A = 0
+    rank_of_Ab = 0
+    for i in range(n):
+        if(Ab[i][i] != 0):
+            rank_of_A += 1
+        if(Ab[i][n] != 0):
+            rank_of_Ab += 1
+    if rank_of_Ab == rank_of_A == n:
         for i in range(n):
             result.append(round(Ab[i][n] / Ab[i][i], 8))
         print('Unique solution: ', end='')
@@ -87,9 +94,19 @@ def solve(filename):
         print()
         print("Inverted A: ")
         print_m(get_inverse(A))
-    elif row > column:
-
-        print('find arbitrary solution')
+    elif rank_of_A == rank_of_Ab < n:
+        for i in range(rank_of_A):
+            result.append(Ab[i][n] / Ab[i][i])
+        while len(result) != n:
+            result.append(0)
+        print('Arbitrary variables: ', end='')
+        for i in range(n):
+            print('x{}'.format(i), end=' ')
+        print()
+        print('Arbitary solution: ', end='')
+        for i in range(n):
+            print(result[i], end=' ')
+        print()
     else:
         print('Inconsistent problem')
     print()
@@ -100,3 +117,4 @@ solve("Data1.txt")
 solve("Data2.txt")
 solve("Data3.txt")
 solve("Data4.txt")
+solve("Data5.txt")
